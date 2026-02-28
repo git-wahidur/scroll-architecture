@@ -248,7 +248,9 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               padding: EdgeInsets.all(12.sp),
                               decoration: BoxDecoration(
-                                color: AppColors.secondary.withOpacity(0.1),
+                                color: AppColors.secondary.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(8.sp),
                               ),
                               child: Column(

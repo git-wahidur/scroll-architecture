@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_event.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
-import '../../../products/presentation/bloc/products_bloc.dart';
-import '../../../products/presentation/bloc/products_event.dart';
-import '../../../products/presentation/bloc/products_state.dart';
-import '../../data/models/product_model.dart';
+import '../bloc/products_bloc.dart';
+import '../bloc/products_event.dart';
+import '../bloc/products_state.dart';
+import '../widgets/product_card.dart';
 
 class ProductListingPage extends StatefulWidget {
   const ProductListingPage({super.key});
@@ -19,7 +18,7 @@ class ProductListingPage extends StatefulWidget {
 }
 
 class _ProductListingPageState extends State<ProductListingPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late TabController _tabController;
   final ScrollController _scrollController = ScrollController();
 
@@ -47,7 +46,6 @@ class _ProductListingPageState extends State<ProductListingPage>
 
   void _handleHorizontalDragUpdate(DragUpdateDetails details) {
     if (!_isDragging) return;
-
     final deltaX = details.globalPosition.dx - _dragStartX;
     if (deltaX.abs() > 50) {
       _isDragging = false;
@@ -73,42 +71,51 @@ class _ProductListingPageState extends State<ProductListingPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: BlocBuilder<ProductsBloc, ProductsState>(
-        builder: (context, productsState) {
-          final categories = productsState.categories.take(3).toList();
-          if (categories.length != _tabController.length) {
-            _tabController.dispose();
-            _tabController = TabController(
-              length: categories.isEmpty ? 3 : categories.length,
-              vsync: this,
-            );
-          }
+      body: SafeArea(
+        child: BlocListener<ProductsBloc, ProductsState>(
+          listenWhen: (previous, current) =>
+              previous.categories.length != current.categories.length,
+          listener: (context, state) {
+            final categories = state.categories.take(3).toList();
+            if (categories.isNotEmpty &&
+                categories.length != _tabController.length) {
+              final oldIndex = _tabController.index;
+              _tabController.dispose();
+              _tabController = TabController(
+                length: categories.length,
+                vsync: this,
+                initialIndex: oldIndex < categories.length ? oldIndex : 0,
+              );
+              setState(() {});
+            }
+          },
+          child: BlocBuilder<ProductsBloc, ProductsState>(
+            builder: (context, productsState) {
+              final categories = productsState.categories.take(3).toList();
 
-          return RefreshIndicator(
-            onRefresh: _onRefresh,
-            color: AppColors.primary,
-            child: GestureDetector(
-              // Horizontal swipe detection
-              onHorizontalDragStart: _handleHorizontalDragStart,
-              onHorizontalDragUpdate: _handleHorizontalDragUpdate,
-              onHorizontalDragEnd: _handleHorizontalDragEnd,
-              child: CustomScrollView(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  // Collapsible App Bar Header
-                  _buildAppBar(context),
+              return RefreshIndicator(
+                onRefresh: _onRefresh,
+                color: AppColors.primary,
+                child: GestureDetector(
+                  onHorizontalDragStart: _handleHorizontalDragStart,
+                  onHorizontalDragUpdate: _handleHorizontalDragUpdate,
+                  onHorizontalDragEnd: _handleHorizontalDragEnd,
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      _buildAppBar(context),
 
-                  // Sticky Tab Bar
-                  _buildStickyTabBar(categories),
+                      _buildStickyTabBar(categories),
 
-                  // Tab Content (Single scrollable area)
-                  _buildTabContent(productsState, categories),
-                ],
-              ),
-            ),
-          );
-        },
+                      _buildTabContent(productsState, categories),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -134,7 +141,6 @@ class _ProductListingPageState extends State<ProductListingPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top Bar with Logo and Profile
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -155,7 +161,8 @@ class _ProductListingPageState extends State<ProductListingPage>
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 child: Text(
-                                  user.name!.firstname![0].toUpperCase(),
+                                  (user.name?.firstname ?? 'U')[0]
+                                      .toUpperCase(),
                                   style: const TextStyle(
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.bold,
@@ -207,7 +214,7 @@ class _ProductListingPageState extends State<ProductListingPage>
 
   Widget _buildStickyTabBar(List<String> categories) {
     return SliverPersistentHeader(
-      pinned: true, // Makes it sticky
+      pinned: true,
       delegate: _StickyTabBarDelegate(
         TabBar(
           controller: _tabController,
@@ -313,7 +320,7 @@ class _ProductListingPageState extends State<ProductListingPage>
               radius: 40,
               backgroundColor: AppColors.primary,
               child: Text(
-                user.firstName[0].toUpperCase(),
+                (user.name?.firstname ?? 'U')[0].toUpperCase(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 32,
@@ -323,7 +330,7 @@ class _ProductListingPageState extends State<ProductListingPage>
             ),
             const SizedBox(height: 16),
             Text(
-              '${user.firstName} ${user.lastName}',
+              '${user.name?.firstname ?? ''} ${user.name?.lastname ?? ''}',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -356,91 +363,7 @@ class _ProductListingPageState extends State<ProductListingPage>
                 backgroundColor: AppColors.error,
                 minimumSize: const Size(double.infinity, 48),
               ),
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProductCard extends StatelessWidget {
-  final ProductModel product;
-
-  const ProductCard({super.key, required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      elevation: 3,
-      child: Padding(
-        padding: EdgeInsets.all(12.sp),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.r),
-              child: Image.network(
-                product.image ?? '',
-                height: 80.h,
-                width: 80.w,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image_not_supported),
-                ),
-              ),
-            ),
-            SizedBox(width: 16.w),
-            // Product Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.title ?? 'No title',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$${product.price?.toStringAsFixed(2) ?? '0.00'}',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      if (product.rating != null)
-                        Row(
-                          children: [
-                            Icon(Icons.star, color: Colors.amber, size: 16.sp),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '${product.rating!.rate} (${product.rating!.count})',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+              child: Text('Logout', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -455,10 +378,10 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   _StickyTabBarDelegate(this.tabBar);
 
   @override
-  double get minExtent => 48.h;
+  double get minExtent => 48;
 
   @override
-  double get maxExtent => 48.h;
+  double get maxExtent => 48;
 
   @override
   Widget build(
@@ -471,6 +394,6 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_StickyTabBarDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }

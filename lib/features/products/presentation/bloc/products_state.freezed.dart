@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductsState {
 
- List<String> get categories; bool get isLoading; bool get isRefreshing; String? get error;
+ List<String> get categories; Map<String, List<ProductModel>> get productsByCategory; bool get isLoading; bool get isRefreshing; String? get error;
 /// Create a copy of ProductsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProductsStateCopyWith<ProductsState> get copyWith => _$ProductsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsState&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsState&&const DeepCollectionEquality().equals(other.categories, categories)&&const DeepCollectionEquality().equals(other.productsByCategory, productsByCategory)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(categories),isLoading,isRefreshing,error);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(categories),const DeepCollectionEquality().hash(productsByCategory),isLoading,isRefreshing,error);
 
 @override
 String toString() {
-  return 'ProductsState(categories: $categories, isLoading: $isLoading, isRefreshing: $isRefreshing, error: $error)';
+  return 'ProductsState(categories: $categories, productsByCategory: $productsByCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ProductsStateCopyWith<$Res>  {
   factory $ProductsStateCopyWith(ProductsState value, $Res Function(ProductsState) _then) = _$ProductsStateCopyWithImpl;
 @useResult
 $Res call({
- List<String> categories, bool isLoading, bool isRefreshing, String? error
+ List<String> categories, Map<String, List<ProductModel>> productsByCategory, bool isLoading, bool isRefreshing, String? error
 });
 
 
@@ -62,10 +62,11 @@ class _$ProductsStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? categories = null,Object? isLoading = null,Object? isRefreshing = null,Object? error = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? categories = null,Object? productsByCategory = null,Object? isLoading = null,Object? isRefreshing = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as List<String>,productsByCategory: null == productsByCategory ? _self.productsByCategory : productsByCategory // ignore: cast_nullable_to_non_nullable
+as Map<String, List<ProductModel>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isRefreshing: null == isRefreshing ? _self.isRefreshing : isRefreshing // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> categories,  bool isLoading,  bool isRefreshing,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> categories,  Map<String, List<ProductModel>> productsByCategory,  bool isLoading,  bool isRefreshing,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductsState() when $default != null:
-return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error);case _:
+return $default(_that.categories,_that.productsByCategory,_that.isLoading,_that.isRefreshing,_that.error);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> categories,  bool isLoading,  bool isRefreshing,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> categories,  Map<String, List<ProductModel>> productsByCategory,  bool isLoading,  bool isRefreshing,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _ProductsState():
-return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error);case _:
+return $default(_that.categories,_that.productsByCategory,_that.isLoading,_that.isRefreshing,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> categories,  bool isLoading,  bool isRefreshing,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> categories,  Map<String, List<ProductModel>> productsByCategory,  bool isLoading,  bool isRefreshing,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductsState() when $default != null:
-return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error);case _:
+return $default(_that.categories,_that.productsByCategory,_that.isLoading,_that.isRefreshing,_that.error);case _:
   return null;
 
 }
@@ -209,7 +210,7 @@ return $default(_that.categories,_that.isLoading,_that.isRefreshing,_that.error)
 
 
 class _ProductsState implements ProductsState {
-  const _ProductsState({final  List<String> categories = const [], this.isLoading = false, this.isRefreshing = false, this.error}): _categories = categories;
+  const _ProductsState({final  List<String> categories = const [], final  Map<String, List<ProductModel>> productsByCategory = const {}, this.isLoading = false, this.isRefreshing = false, this.error}): _categories = categories,_productsByCategory = productsByCategory;
   
 
  final  List<String> _categories;
@@ -217,6 +218,13 @@ class _ProductsState implements ProductsState {
   if (_categories is EqualUnmodifiableListView) return _categories;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categories);
+}
+
+ final  Map<String, List<ProductModel>> _productsByCategory;
+@override@JsonKey() Map<String, List<ProductModel>> get productsByCategory {
+  if (_productsByCategory is EqualUnmodifiableMapView) return _productsByCategory;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_productsByCategory);
 }
 
 @override@JsonKey() final  bool isLoading;
@@ -233,16 +241,16 @@ _$ProductsStateCopyWith<_ProductsState> get copyWith => __$ProductsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductsState&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductsState&&const DeepCollectionEquality().equals(other._categories, _categories)&&const DeepCollectionEquality().equals(other._productsByCategory, _productsByCategory)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories),isLoading,isRefreshing,error);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories),const DeepCollectionEquality().hash(_productsByCategory),isLoading,isRefreshing,error);
 
 @override
 String toString() {
-  return 'ProductsState(categories: $categories, isLoading: $isLoading, isRefreshing: $isRefreshing, error: $error)';
+  return 'ProductsState(categories: $categories, productsByCategory: $productsByCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, error: $error)';
 }
 
 
@@ -253,7 +261,7 @@ abstract mixin class _$ProductsStateCopyWith<$Res> implements $ProductsStateCopy
   factory _$ProductsStateCopyWith(_ProductsState value, $Res Function(_ProductsState) _then) = __$ProductsStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> categories, bool isLoading, bool isRefreshing, String? error
+ List<String> categories, Map<String, List<ProductModel>> productsByCategory, bool isLoading, bool isRefreshing, String? error
 });
 
 
@@ -270,10 +278,11 @@ class __$ProductsStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? categories = null,Object? isLoading = null,Object? isRefreshing = null,Object? error = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? categories = null,Object? productsByCategory = null,Object? isLoading = null,Object? isRefreshing = null,Object? error = freezed,}) {
   return _then(_ProductsState(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<String>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as List<String>,productsByCategory: null == productsByCategory ? _self._productsByCategory : productsByCategory // ignore: cast_nullable_to_non_nullable
+as Map<String, List<ProductModel>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isRefreshing: null == isRefreshing ? _self.isRefreshing : isRefreshing // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,

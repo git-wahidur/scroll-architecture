@@ -15,8 +15,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController(text: 'demo123');
-  final _passwordController = TextEditingController(text: '12345');
+  final _usernameController = TextEditingController(text: 'kate_h');
+  final _passwordController = TextEditingController(text: 'kfejk@*_');
   bool _obscurePassword = true;
 
   @override
@@ -178,6 +178,16 @@ class _LoginPageState extends State<LoginPage> {
                             BlocConsumer<AuthBloc, AuthState>(
                               listener: (context, state) {
                                 state.maybeWhen(
+                                  authenticated: (user) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Welcome back, ${user.username}!',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  },
                                   error: (message) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -250,14 +260,14 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    'Username: demo123',
+                                    'Username: kate_h',
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: AppColors.textSecondary,
                                     ),
                                   ),
                                   Text(
-                                    'Password: 12345',
+                                    'Password: kfejk@*_',
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: AppColors.textSecondary,

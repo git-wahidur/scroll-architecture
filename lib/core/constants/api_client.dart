@@ -6,15 +6,17 @@ class ApiClient {
   late final Dio _dio;
   String? _token;
 
-  ApiClient() {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: ApiConstants.baseUrl,
-        connectTimeout: const Duration(seconds: 30),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {'Content-Type': 'application/json'},
-      ),
-    );
+  ApiClient({Dio? dio}) {
+    _dio =
+        dio ??
+        Dio(
+          BaseOptions(
+            baseUrl: ApiConstants.baseUrl,
+            connectTimeout: const Duration(seconds: 30),
+            receiveTimeout: const Duration(seconds: 30),
+            headers: {'Content-Type': 'application/json'},
+          ),
+        );
 
     _dio.interceptors.add(
       InterceptorsWrapper(
@@ -60,7 +62,13 @@ class ApiClient {
       case DioExceptionType.receiveTimeout:
         return Exception('Connection timeout');
       case DioExceptionType.badResponse:
-        return Exception(error.response?.data['message'] ?? 'Server error');
+        final data = error.response?.data;
+        if (data is Map<String, dynamic>) {
+          return Exception(data['message'] ?? 'Server error');
+        } else if (data is String) {
+          return Exception(data);
+        }
+        return Exception('Server error: ${error.response?.statusCode}');
       default:
         return Exception('Network error');
     }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_event.dart';
+import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_state.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -20,6 +24,14 @@ class _LoginPageState extends State<LoginPage> {
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+        AuthEvent.login(_usernameController.text, _passwordController.text),
+      );
+    }
   }
 
   @override
@@ -163,27 +175,60 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 24),
 
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                elevation: 2,
-                              ),
-                              child: const Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
+                            BlocConsumer<AuthBloc, AuthState>(
+                              listener: (context, state) {
+                                state.maybeWhen(
+                                  error: (message) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(message),
+                                        backgroundColor: AppColors.error,
+                                      ),
+                                    );
+                                  },
+                                  orElse: () {},
+                                );
+                              },
+                              builder: (context, state) {
+                                final isLoading = state.maybeWhen(
+                                  loading: () => true,
+                                  orElse: () => false,
+                                );
+                                return ElevatedButton(
+                                  onPressed: isLoading ? null : _login,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    elevation: 2,
+                                  ),
+                                  child: isLoading
+                                      ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
+                                        )
+                                      : const Text(
+                                          'LOGIN',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                );
+                              },
                             ),
                             const SizedBox(height: 16),
 

@@ -10,6 +10,7 @@ abstract class ProductsState with _$ProductsState {
     @Default({}) Map<String, List<ProductModel>> productsByCategory,
     @Default(false) bool isLoading,
     @Default(false) bool isRefreshing,
+    @Default('') String searchQuery,
     String? error,
   }) = _ProductsState;
 }

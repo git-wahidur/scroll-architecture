@@ -12,6 +12,11 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<LoadCategories>(_onLoadCategories);
     on<LoadProductsByCategory>(_onLoadProductsByCategory);
     on<Refresh>(_onRefresh);
+    on<Search>(_onSearch);
+  }
+
+  void _onSearch(Search event, Emitter<ProductsState> emit) {
+    emit(state.copyWith(searchQuery: event.query));
   }
 
   Future<void> _onLoadCategories(

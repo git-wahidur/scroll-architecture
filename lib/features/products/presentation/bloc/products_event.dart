@@ -8,4 +8,5 @@ abstract class ProductsEvent with _$ProductsEvent {
   const factory ProductsEvent.loadProductsByCategory(String category) =
       LoadProductsByCategory;
   const factory ProductsEvent.refresh() = Refresh;
+  const factory ProductsEvent.search(String query) = Search;
 }

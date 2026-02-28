@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_event.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/products_bloc.dart';
@@ -21,6 +22,7 @@ class _ProductListingPageState extends State<ProductListingPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   double _dragStartX = 0;
   bool _isDragging = false;
@@ -36,6 +38,7 @@ class _ProductListingPageState extends State<ProductListingPage>
   void dispose() {
     _tabController.dispose();
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -185,15 +188,37 @@ class _ProductListingPageState extends State<ProductListingPage>
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        context.read<ProductsBloc>().add(
+                          ProductsEvent.search(value),
+                        );
+                      },
                       decoration: InputDecoration(
                         hintText: 'Search products...',
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: AppColors.textHint,
                           fontSize: 14,
                         ),
                         prefixIcon: const Icon(
                           Icons.search,
                           color: AppColors.textSecondary,
+                        ),
+                        suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _searchController,
+                          builder: (context, value, child) {
+                            return value.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, size: 18),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      context.read<ProductsBloc>().add(
+                                        const ProductsEvent.search(''),
+                                      );
+                                    },
+                                  )
+                                : const SizedBox.shrink();
+                          },
                         ),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(
@@ -281,20 +306,52 @@ class _ProductListingPageState extends State<ProductListingPage>
           }
 
           final category = categories[currentIndex];
-          final products = state.productsByCategory[category] ?? [];
+          var products = state.productsByCategory[category] ?? [];
+
+          if (state.searchQuery.isNotEmpty) {
+            products = products
+                .where(
+                  (p) =>
+                      (p.title ?? '').toLowerCase().contains(
+                        state.searchQuery.toLowerCase(),
+                      ) ||
+                      (p.category ?? '').toLowerCase().contains(
+                        state.searchQuery.toLowerCase(),
+                      ),
+                )
+                .toList();
+          }
 
           if (products.isEmpty) {
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
-              child: const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                ),
+              child: Center(
+                child: state.searchQuery.isNotEmpty
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: AppColors.textSecondary,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No results for "${state.searchQuery}"',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      )
+                    : const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primary,
+                        ),
+                      ),
               ),
             );
           }
-
-          // Display products for current tab
           return Column(
             children: products
                 .map((product) => ProductCard(product: product))
@@ -305,68 +362,149 @@ class _ProductListingPageState extends State<ProductListingPage>
     );
   }
 
-  void _showUserProfile(BuildContext context, user) {
+  void _showUserProfile(BuildContext context, UserModel user) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: AppColors.primary,
-              child: Text(
-                (user.name?.firstname ?? 'U')[0].toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        expand: false,
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '${user.name?.firstname ?? ''} ${user.name?.lastname ?? ''}',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: AppColors.primary,
+                child: Text(
+                  (user.name?.firstname ?? 'U')[0].toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              user.email,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
+              const SizedBox(height: 16),
+              Text(
+                '${user.name?.firstname ?? ''} ${user.name?.lastname ?? ''}',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              user.phone,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
+              Text(
+                '@${user.username}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                context.read<AuthBloc>().add(const AuthEvent.logout());
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                minimumSize: const Size(double.infinity, 48),
+              const SizedBox(height: 32),
+              _buildProfileItem(
+                Icons.email_outlined,
+                'Email',
+                user.email ?? '',
               ),
-              child: Text('Logout', style: TextStyle(color: Colors.white)),
-            ),
-          ],
+              _buildProfileItem(
+                Icons.phone_android_outlined,
+                'Phone',
+                user.phone ?? '',
+              ),
+              _buildProfileItem(Icons.fingerprint, 'User ID', '#${user.id}'),
+
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.read<AuthBloc>().add(const AuthEvent.logout());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'LOGOUT',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfileItem(
+    IconData icon,
+    String label,
+    String value, {
+    bool isPassword = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.primary, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

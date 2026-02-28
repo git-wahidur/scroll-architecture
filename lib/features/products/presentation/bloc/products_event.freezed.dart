@@ -55,13 +55,14 @@ extension ProductsEventPatterns on ProductsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadCategories value)?  loadCategories,TResult Function( LoadProductsByCategory value)?  loadProductsByCategory,TResult Function( Refresh value)?  refresh,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadCategories value)?  loadCategories,TResult Function( LoadProductsByCategory value)?  loadProductsByCategory,TResult Function( Refresh value)?  refresh,TResult Function( Search value)?  search,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LoadCategories() when loadCategories != null:
 return loadCategories(_that);case LoadProductsByCategory() when loadProductsByCategory != null:
 return loadProductsByCategory(_that);case Refresh() when refresh != null:
-return refresh(_that);case _:
+return refresh(_that);case Search() when search != null:
+return search(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return refresh(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadCategories value)  loadCategories,required TResult Function( LoadProductsByCategory value)  loadProductsByCategory,required TResult Function( Refresh value)  refresh,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadCategories value)  loadCategories,required TResult Function( LoadProductsByCategory value)  loadProductsByCategory,required TResult Function( Refresh value)  refresh,required TResult Function( Search value)  search,}){
 final _that = this;
 switch (_that) {
 case LoadCategories():
 return loadCategories(_that);case LoadProductsByCategory():
 return loadProductsByCategory(_that);case Refresh():
-return refresh(_that);case _:
+return refresh(_that);case Search():
+return search(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return refresh(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadCategories value)?  loadCategories,TResult? Function( LoadProductsByCategory value)?  loadProductsByCategory,TResult? Function( Refresh value)?  refresh,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadCategories value)?  loadCategories,TResult? Function( LoadProductsByCategory value)?  loadProductsByCategory,TResult? Function( Refresh value)?  refresh,TResult? Function( Search value)?  search,}){
 final _that = this;
 switch (_that) {
 case LoadCategories() when loadCategories != null:
 return loadCategories(_that);case LoadProductsByCategory() when loadProductsByCategory != null:
 return loadProductsByCategory(_that);case Refresh() when refresh != null:
-return refresh(_that);case _:
+return refresh(_that);case Search() when search != null:
+return search(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return refresh(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadCategories,TResult Function( String category)?  loadProductsByCategory,TResult Function()?  refresh,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadCategories,TResult Function( String category)?  loadProductsByCategory,TResult Function()?  refresh,TResult Function( String query)?  search,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadCategories() when loadCategories != null:
 return loadCategories();case LoadProductsByCategory() when loadProductsByCategory != null:
 return loadProductsByCategory(_that.category);case Refresh() when refresh != null:
-return refresh();case _:
+return refresh();case Search() when search != null:
+return search(_that.query);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return refresh();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadCategories,required TResult Function( String category)  loadProductsByCategory,required TResult Function()  refresh,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadCategories,required TResult Function( String category)  loadProductsByCategory,required TResult Function()  refresh,required TResult Function( String query)  search,}) {final _that = this;
 switch (_that) {
 case LoadCategories():
 return loadCategories();case LoadProductsByCategory():
 return loadProductsByCategory(_that.category);case Refresh():
-return refresh();case _:
+return refresh();case Search():
+return search(_that.query);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return refresh();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadCategories,TResult? Function( String category)?  loadProductsByCategory,TResult? Function()?  refresh,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadCategories,TResult? Function( String category)?  loadProductsByCategory,TResult? Function()?  refresh,TResult? Function( String query)?  search,}) {final _that = this;
 switch (_that) {
 case LoadCategories() when loadCategories != null:
 return loadCategories();case LoadProductsByCategory() when loadProductsByCategory != null:
 return loadProductsByCategory(_that.category);case Refresh() when refresh != null:
-return refresh();case _:
+return refresh();case Search() when search != null:
+return search(_that.query);case _:
   return null;
 
 }
@@ -312,5 +318,71 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class Search implements ProductsEvent {
+  const Search(this.query);
+  
+
+ final  String query;
+
+/// Create a copy of ProductsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SearchCopyWith<Search> get copyWith => _$SearchCopyWithImpl<Search>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Search&&(identical(other.query, query) || other.query == query));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,query);
+
+@override
+String toString() {
+  return 'ProductsEvent.search(query: $query)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SearchCopyWith<$Res> implements $ProductsEventCopyWith<$Res> {
+  factory $SearchCopyWith(Search value, $Res Function(Search) _then) = _$SearchCopyWithImpl;
+@useResult
+$Res call({
+ String query
+});
+
+
+
+
+}
+/// @nodoc
+class _$SearchCopyWithImpl<$Res>
+    implements $SearchCopyWith<$Res> {
+  _$SearchCopyWithImpl(this._self, this._then);
+
+  final Search _self;
+  final $Res Function(Search) _then;
+
+/// Create a copy of ProductsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? query = null,}) {
+  return _then(Search(
+null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 // dart format on

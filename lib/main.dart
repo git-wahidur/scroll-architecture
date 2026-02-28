@@ -5,8 +5,10 @@ import 'package:scroll_architecture_task/core/constants/api_client.dart';
 import 'package:scroll_architecture_task/core/constants/app_colors.dart';
 import 'package:scroll_architecture_task/features/auth/data/repository/auth_repository.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_state.dart';
 import 'package:scroll_architecture_task/features/products/data/repository/products_repository.dart';
 import 'package:scroll_architecture_task/features/products/presentation/bloc/products_bloc.dart';
+import 'package:scroll_architecture_task/features/products/presentation/views/product_list.dart';
 
 import 'features/auth/presentation/views/login_page.dart';
 

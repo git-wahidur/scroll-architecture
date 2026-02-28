@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- int get id; String get email; String get username;@JsonKey(name: 'name') NameModel get name; String get phone; String? get token;
+ int? get id; String? get email; String? get username;@JsonKey(name: 'name') NameModel? get name; String? get phone; String? get token;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String email, String username,@JsonKey(name: 'name') NameModel name, String phone, String? token
+ int? id, String? email, String? username,@JsonKey(name: 'name') NameModel? name, String? phone, String? token
 });
 
 
-$NameModelCopyWith<$Res> get name;
+$NameModelCopyWith<$Res>? get name;
 
 }
 /// @nodoc
@@ -65,14 +65,14 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? email = null,Object? username = null,Object? name = null,Object? phone = null,Object? token = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? email = freezed,Object? username = freezed,Object? name = freezed,Object? phone = freezed,Object? token = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as NameModel,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as NameModel?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -80,9 +80,12 @@ as String?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$NameModelCopyWith<$Res> get name {
-  
-  return $NameModelCopyWith<$Res>(_self.name, (value) {
+$NameModelCopyWith<$Res>? get name {
+    if (_self.name == null) {
+    return null;
+  }
+
+  return $NameModelCopyWith<$Res>(_self.name!, (value) {
     return _then(_self.copyWith(name: value));
   });
 }
@@ -167,7 +170,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String email,  String username, @JsonKey(name: 'name')  NameModel name,  String phone,  String? token)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? email,  String? username, @JsonKey(name: 'name')  NameModel? name,  String? phone,  String? token)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
 return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that.token);case _:
@@ -188,7 +191,7 @@ return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String email,  String username, @JsonKey(name: 'name')  NameModel name,  String phone,  String? token)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? email,  String? username, @JsonKey(name: 'name')  NameModel? name,  String? phone,  String? token)  $default,) {final _that = this;
 switch (_that) {
 case _UserModel():
 return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that.token);case _:
@@ -208,7 +211,7 @@ return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String email,  String username, @JsonKey(name: 'name')  NameModel name,  String phone,  String? token)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? email,  String? username, @JsonKey(name: 'name')  NameModel? name,  String? phone,  String? token)?  $default,) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
 return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that.token);case _:
@@ -223,14 +226,14 @@ return $default(_that.id,_that.email,_that.username,_that.name,_that.phone,_that
 @JsonSerializable()
 
 class _UserModel implements UserModel {
-  const _UserModel({required this.id, required this.email, required this.username, @JsonKey(name: 'name') required this.name, required this.phone, this.token});
+  const _UserModel({this.id, this.email, this.username, @JsonKey(name: 'name') this.name, this.phone, this.token});
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
-@override final  int id;
-@override final  String email;
-@override final  String username;
-@override@JsonKey(name: 'name') final  NameModel name;
-@override final  String phone;
+@override final  int? id;
+@override final  String? email;
+@override final  String? username;
+@override@JsonKey(name: 'name') final  NameModel? name;
+@override final  String? phone;
 @override final  String? token;
 
 /// Create a copy of UserModel
@@ -266,11 +269,11 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String email, String username,@JsonKey(name: 'name') NameModel name, String phone, String? token
+ int? id, String? email, String? username,@JsonKey(name: 'name') NameModel? name, String? phone, String? token
 });
 
 
-@override $NameModelCopyWith<$Res> get name;
+@override $NameModelCopyWith<$Res>? get name;
 
 }
 /// @nodoc
@@ -283,14 +286,14 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? email = null,Object? username = null,Object? name = null,Object? phone = null,Object? token = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? email = freezed,Object? username = freezed,Object? name = freezed,Object? phone = freezed,Object? token = freezed,}) {
   return _then(_UserModel(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as NameModel,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as NameModel?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -299,9 +302,12 @@ as String?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$NameModelCopyWith<$Res> get name {
-  
-  return $NameModelCopyWith<$Res>(_self.name, (value) {
+$NameModelCopyWith<$Res>? get name {
+    if (_self.name == null) {
+    return null;
+  }
+
+  return $NameModelCopyWith<$Res>(_self.name!, (value) {
     return _then(_self.copyWith(name: value));
   });
 }
@@ -311,7 +317,7 @@ $NameModelCopyWith<$Res> get name {
 /// @nodoc
 mixin _$NameModel {
 
- String get firstname; String get lastname;
+ String? get firstname; String? get lastname;
 /// Create a copy of NameModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -344,7 +350,7 @@ abstract mixin class $NameModelCopyWith<$Res>  {
   factory $NameModelCopyWith(NameModel value, $Res Function(NameModel) _then) = _$NameModelCopyWithImpl;
 @useResult
 $Res call({
- String firstname, String lastname
+ String? firstname, String? lastname
 });
 
 
@@ -361,11 +367,11 @@ class _$NameModelCopyWithImpl<$Res>
 
 /// Create a copy of NameModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? firstname = null,Object? lastname = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? firstname = freezed,Object? lastname = freezed,}) {
   return _then(_self.copyWith(
-firstname: null == firstname ? _self.firstname : firstname // ignore: cast_nullable_to_non_nullable
-as String,lastname: null == lastname ? _self.lastname : lastname // ignore: cast_nullable_to_non_nullable
-as String,
+firstname: freezed == firstname ? _self.firstname : firstname // ignore: cast_nullable_to_non_nullable
+as String?,lastname: freezed == lastname ? _self.lastname : lastname // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -450,7 +456,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String firstname,  String lastname)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? firstname,  String? lastname)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NameModel() when $default != null:
 return $default(_that.firstname,_that.lastname);case _:
@@ -471,7 +477,7 @@ return $default(_that.firstname,_that.lastname);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String firstname,  String lastname)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? firstname,  String? lastname)  $default,) {final _that = this;
 switch (_that) {
 case _NameModel():
 return $default(_that.firstname,_that.lastname);case _:
@@ -491,7 +497,7 @@ return $default(_that.firstname,_that.lastname);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String firstname,  String lastname)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? firstname,  String? lastname)?  $default,) {final _that = this;
 switch (_that) {
 case _NameModel() when $default != null:
 return $default(_that.firstname,_that.lastname);case _:
@@ -506,11 +512,11 @@ return $default(_that.firstname,_that.lastname);case _:
 @JsonSerializable()
 
 class _NameModel implements NameModel {
-  const _NameModel({required this.firstname, required this.lastname});
+  const _NameModel({this.firstname, this.lastname});
   factory _NameModel.fromJson(Map<String, dynamic> json) => _$NameModelFromJson(json);
 
-@override final  String firstname;
-@override final  String lastname;
+@override final  String? firstname;
+@override final  String? lastname;
 
 /// Create a copy of NameModel
 /// with the given fields replaced by the non-null parameter values.
@@ -545,7 +551,7 @@ abstract mixin class _$NameModelCopyWith<$Res> implements $NameModelCopyWith<$Re
   factory _$NameModelCopyWith(_NameModel value, $Res Function(_NameModel) _then) = __$NameModelCopyWithImpl;
 @override @useResult
 $Res call({
- String firstname, String lastname
+ String? firstname, String? lastname
 });
 
 
@@ -562,11 +568,11 @@ class __$NameModelCopyWithImpl<$Res>
 
 /// Create a copy of NameModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? firstname = null,Object? lastname = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? firstname = freezed,Object? lastname = freezed,}) {
   return _then(_NameModel(
-firstname: null == firstname ? _self.firstname : firstname // ignore: cast_nullable_to_non_nullable
-as String,lastname: null == lastname ? _self.lastname : lastname // ignore: cast_nullable_to_non_nullable
-as String,
+firstname: freezed == firstname ? _self.firstname : firstname // ignore: cast_nullable_to_non_nullable
+as String?,lastname: freezed == lastname ? _self.lastname : lastname // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

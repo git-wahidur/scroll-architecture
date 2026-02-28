@@ -4,13 +4,13 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 @freezed
-class UserModel with _$UserModel {
+abstract class UserModel with _$UserModel {
   const factory UserModel({
-    required int id,
-    required String email,
-    required String username,
-    @JsonKey(name: 'name') required NameModel name,
-    required String phone,
+    int? id,
+    String? email,
+    String? username,
+    @JsonKey(name: 'name') NameModel? name,
+    String? phone,
     String? token,
   }) = _UserModel;
 
@@ -19,10 +19,10 @@ class UserModel with _$UserModel {
 }
 
 @freezed
-class NameModel with _$NameModel {
+abstract class NameModel with _$NameModel {
   const factory NameModel({
-    required String firstname,
-    required String lastname,
+    String? firstname,
+    String? lastname,
   }) = _NameModel;
 
   factory NameModel.fromJson(Map<String, dynamic> json) =>

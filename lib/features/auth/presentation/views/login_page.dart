@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_event.dart';
 import 'package:scroll_architecture_task/features/auth/presentation/bloc/auth_state.dart';
@@ -48,80 +49,80 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.sp),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: EdgeInsets.all(24.sp),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.shopping_bag,
-                      size: 64,
+                      size: 64.sp,
                       color: AppColors.primary,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
+                  SizedBox(height: 24.sp),
+                  Text(
                     'DARAZ',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 36,
+                      fontSize: 36.sp,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8.sp),
+                  Text(
                     'Your Shopping Companion',
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: Colors.white70, fontSize: 16.sp),
                   ),
-                  const SizedBox(height: 48),
+                  SizedBox(height: 48.sp),
                   Card(
                     elevation: 8,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.sp),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(24),
+                      padding: EdgeInsets.all(24.sp),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Text(
+                            Text(
                               'Welcome Back!',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 24.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 8),
-                            const Text(
+                            SizedBox(height: 8.sp),
+                            Text(
                               'Login to continue shopping',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: AppColors.textSecondary,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 32),
+                            SizedBox(height: 32.sp),
                             // Username Field
                             TextFormField(
                               controller: _usernameController,
                               decoration: InputDecoration(
                                 labelText: 'Username',
-                                prefixIcon: const Icon(Icons.person_outline),
+                                prefixIcon: Icon(Icons.person_outline),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.sp),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.sp),
                                   borderSide: const BorderSide(
                                     color: AppColors.primary,
                                     width: 2,
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.sp),
                             // Password Field
                             TextFormField(
                               controller: _passwordController,
@@ -156,10 +157,10 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.sp),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.sp),
                                   borderSide: const BorderSide(
                                     color: AppColors.primary,
                                     width: 2,
@@ -173,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 24),
+                            SizedBox(height: 24.sp),
 
                             BlocConsumer<AuthBloc, AuthState>(
                               listener: (context, state) {
@@ -209,30 +210,32 @@ class _LoginPageState extends State<LoginPage> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primary,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 16.sp,
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(
+                                        12.sp,
+                                      ),
                                     ),
                                     elevation: 2,
                                   ),
                                   child: isLoading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
+                                      ? SizedBox(
+                                          height: 20.sp,
+                                          width: 20.sp,
                                           child: CircularProgressIndicator(
-                                            strokeWidth: 2,
+                                            strokeWidth: 2.sp,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                                   Colors.white,
                                                 ),
                                           ),
                                         )
-                                      : const Text(
+                                      : Text(
                                           'LOGIN',
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 16.sp,
                                             fontWeight: FontWeight.bold,
                                             letterSpacing: 1,
                                           ),
@@ -240,36 +243,36 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                               },
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.sp),
 
                             Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: EdgeInsets.all(12.sp),
                               decoration: BoxDecoration(
                                 color: AppColors.secondary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.sp),
                               ),
                               child: Column(
-                                children: const [
+                                children: [
                                   Text(
                                     'Demo Credentials',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.secondary,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 4.sp),
                                   Text(
                                     'Username: kate_h',
                                     style: TextStyle(
-                                      fontSize: 11,
+                                      fontSize: 11.sp,
                                       color: AppColors.textSecondary,
                                     ),
                                   ),
                                   Text(
                                     'Password: kfejk@*_',
                                     style: TextStyle(
-                                      fontSize: 11,
+                                      fontSize: 11.sp,
                                       color: AppColors.textSecondary,
                                     ),
                                   ),
